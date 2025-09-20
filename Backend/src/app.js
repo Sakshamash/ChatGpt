@@ -14,17 +14,44 @@ const app = express();
 
 
 /* using middlewares */
+// Enable pre-flight requests for all routes
+app.options('*', cors());
+
+// Main CORS configuration
 app.use(cors({
-    origin: ['https://chatgpt-qg5w.onrender.com', 'http://localhost:5173'],
+    origin: function(origin, callback) {
+        const allowedOrigins = ['https://chatgpt-qg5w.onrender.com', 'http://localhost:5173'];
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'credentials']
-}))
+    allowedHeaders: ['Content-Type', 'Authorization', 'credentials', 'Origin', 'Accept'],
+    optionsSuccessStatus: 200
+}));
+
+// Add security headers
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://chatgpt-qg5w.onrender.com');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, credentials');
+    next();
+});
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
 
+
+/* Test route for CORS */
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'CORS is working' });
+});
 
 /* Using Routes */
 app.use('/api/auth', authRoutes);
