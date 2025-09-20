@@ -16,30 +16,26 @@ const Register = () => {
     async function handleSubmit(e) {
         e.preventDefault();
         setSubmitting(true);
-        console.log(form);
-
-        axios.post("https://chatgpt-qg5w.onrender.com/api/auth/register", {
-            email: form.email,
-            fullName: {
-                firstName: form.firstname,
-                lastName: form.lastname
-            },
-            password: form.password
-        }, {
-            withCredentials: true
-        }).then((res) => {
-            console.log(res);
-            navigate("/");
-        }).catch((err) => {
-            console.error(err);
-            alert('Registration failed (placeholder)');
-        })
+        console.log('Submitting form:', form);
 
         try {
-            // Placeholder: integrate real registration logic / API call.
+            const response = await axios.post("https://chatgpt-qg5w.onrender.com/api/auth/register", {
+                email: form.email,
+                fullName: {
+                    firstName: form.firstname,
+                    lastName: form.lastname
+                },
+                password: form.password
+            }, {
+                withCredentials: true
+            });
 
+            console.log('Registration successful:', response.data);
+            navigate("/");
         } catch (err) {
-            console.error(err);
+            console.error('Registration error:', err);
+            const errorMessage = err.response?.data?.message || err.message || 'Registration failed. Please try again.';
+            alert(errorMessage);
         } finally {
             setSubmitting(false);
         }
