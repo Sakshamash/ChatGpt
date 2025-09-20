@@ -1,22 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { io } from "socket.io-client";
 import ChatMobileBar from '../components/chat/ChatMobileBar.jsx';
 import ChatSidebar from '../components/chat/ChatSidebar.jsx';
 import ChatMessages from '../components/chat/ChatMessages.jsx';
 import ChatComposer from '../components/chat/ChatComposer.jsx';
 import '../components/chat/ChatLayout.css';
-import { fakeAIReply } from '../components/chat/aiClient.js';
+
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import {
-  ensureInitialChat,
+
   startNewChat,
   selectChat,
   setInput,
   sendingStarted,
   sendingFinished,
-  addUserMessage,
-  addAIMessage,
   setChats
 } from '../store/chatSlice.js';
 
@@ -29,7 +27,7 @@ const Home = () => {
   const [ sidebarOpen, setSidebarOpen ] = React.useState(false);
   const [ socket, setSocket ] = useState(null);
 
-  const activeChat = chats.find(c => c.id === activeChatId) || null;
+  // const activeChat = chats.find(c => c.id === activeChatId) || null;
 
   const [ messages, setMessages ] = useState([
     // {
@@ -61,12 +59,12 @@ const Home = () => {
   // Ensure at least one chat exists initially
   useEffect(() => {
 
-    axios.get("https://cohort-1-project-chat-gpt.onrender.com/api/chat", { withCredentials: true })
+    axios.get("https://chat-gpt.onrender.com/api/chat", { withCredentials: true })
       .then(response => {
         dispatch(setChats(response.data.chats.reverse()));
       })
 
-    const tempSocket = io("https://cohort-1-project-chat-gpt.onrender.com", {
+    const tempSocket = io("https://chat-gpt.onrender.com", {
       withCredentials: true,
     })
 
