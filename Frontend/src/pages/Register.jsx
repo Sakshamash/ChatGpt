@@ -19,7 +19,7 @@ const Register = () => {
         console.log('Submitting form:', form);
 
         try {
-            const response = await axios.post("https://chatgpt-qg5w.onrender.com/api/auth/register", {
+            const response = await axios.post("https://chat-gpt.onrender.com/api/auth/register", {
                 email: form.email,
                 fullName: {
                     firstName: form.firstname,

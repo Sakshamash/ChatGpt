@@ -15,8 +15,10 @@ const app = express();
 
 /* using middlewares */
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
+    origin: ['https://chatgpt-qg5w.onrender.com', 'http://localhost:5173'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'credentials']
 }))
 app.use(express.json());
 app.use(cookieParser());
